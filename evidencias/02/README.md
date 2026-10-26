@@ -1,38 +1,37 @@
 # Bloque 02
-
+ 
 ## Resultado
+- Qué añadí al proyecto:
+He modificado serverless.yml para añadir otra ruta para hacer consultas por id y creado getEvent.ts para poder realizar gets en /events/id y que devuelva un evento
+- Ruta o pantalla comprobada:
+curl -i http://localhost:3000/dev/events/EVT-205
+HTTP/1.1 200 OK
+content-type: application/json; charset=utf-8
+vary: origin
+access-control-expose-headers: WWW-Authenticate,Server-Authorization
+cache-control: no-cache
+content-length: 95
+accept-ranges: bytes
+Date: Mon, 26 Oct 2026 12:18:59 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
 
-- **Qué añadí al proyecto:** Modifiqué `backend/serverless.yml` para registrar la función `getEvent` en la ruta `GET /events/{id}` y creé `backend/src/getEvent.ts` para procesar la consulta y responder con los datos del evento.
-- **Ruta comprobada:** `GET http://localhost:3000/dev/events/EVT-205`
-- **Estado y respuesta observados:** La petición respondió `200 OK` con un JSON que incluye el identificador recibido y los datos de un evento de ejemplo:
-
-  ```json
-  {
-    "id": "EVT-205",
-    "artist": "Neon Waves",
-    "space": "Main Stage",
-    "time": "22:30",
-    "status": "CONFIRMED"
-  }
-  ```
-
+{"id":"EVT-205","artist":"Neon Waves","space":"Main Stage","time":"22:30","status":"CONFIRMED"}
+- Estado y respuesta observados:
+Hal hacer consultas a la nueva ruta devuelve siempre el evento con la id que se le haya dado.
+ 
 ## Comprensión
-
-- **Recorrido del dato:** Serverless Offline recibe la petición y, según la ruta configurada en `serverless.yml`, invoca `getEvent.handler`. El parámetro `{id}` de la URL llega en `event.pathParameters.id`. El handler lo incluye en el objeto de respuesta, lo convierte a JSON y devuelve el estado HTTP `200`.
-- **Cambio guiado y resultado:** Añadí una ruta con un segmento dinámico (`{id}`) y un handler TypeScript que lo lee. Al consultar `/dev/events/EVT-205`, la respuesta incluye `"id": "EVT-205"`.
-- **Error encontrado y cómo lo resolví:** No se registró ningún error durante la comprobación de esta petición. El handler también contempla el caso en que no llegue un identificador y responde `400` con `{"message":"Falta id"}`.
-
+- Recorrido del dato, explicado con mis palabras:
+Serverless Offline recibe la petición GET, busca la ruta events/{id} configurada en serverless.yml y ejecuta getEvent.handler. El identificador de la URL se obtiene de event.pathParameters.id y se incluye en el JSON de respuesta.
+- Cambio guiado y resultado:
+Se añadió el segmento dinámico {id} a la ruta y el handler lee ese valor. Al consultar /dev/events/EVT-205, la respuesta incluye "id":"EVT-205".
+- Error encontrado y cómo lo resolví:
+No se registró ningún error durante la comprobación de la petición. El handler responde con estado 400 y el mensaje "Falta id" cuando no recibe un identificador.
+ 
 ## Evidencias
-
-- **Transcripción de la comprobación:**
-
-  ```text
-  $ curl -i http://localhost:3000/dev/events/EVT-205
-  HTTP/1.1 200 OK
-  content-type: application/json; charset=utf-8
-  content-length: 95
-
-  {"id":"EVT-205","artist":"Neon Waves","space":"Main Stage","time":"22:30","status":"CONFIRMED"}
-  ```
-
-- **Limitaciones del ejercicio:** El handler devuelve datos de ejemplo definidos en el código; todavía no consulta una base de datos ni comprueba si el evento existe. Por eso, cualquier identificador no vacío recibe los mismos datos, salvo por el valor de `id`.
+- Captura o transcripción breve, sin credenciales:
+Petición: GET http://localhost:3000/dev/events/EVT-205
+Respuesta: HTTP 200 OK
+{"id":"EVT-205","artist":"Neon Waves","space":"Main Stage","time":"22:30","status":"CONFIRMED"}
+- Limitaciones del ejercicio:
+El handler devuelve datos de ejemplo definidos en el código. No consulta una base de datos ni comprueba si el evento existe; para cualquier identificador no vacío devuelve los mismos datos, cambiando el valor del campo id.
