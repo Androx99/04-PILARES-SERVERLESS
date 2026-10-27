@@ -1,6 +1,6 @@
 service: festival-control-api-${env:STUDENT_CODE}
 frameworkVersion: ~4.45.0
- 
+
 provider:
   name: aws
   runtime: nodejs22.x
@@ -8,10 +8,10 @@ provider:
   stage: dev
   iam:
     role: ${env:LAMBDA_ROLE_ARN}
- 
+
 plugins:
   - serverless-offline
- 
+
 functions:
   hello:
     handler: dist/hello.handler
@@ -20,7 +20,7 @@ functions:
           path: hello
           method: get
           cors: true
- 
+
   getEvent:
     handler: dist/events/get.handler
     events:
@@ -28,7 +28,7 @@ functions:
           path: events/{id}
           method: get
           cors: true
- 
+
   createEvent:
     handler: dist/events/create.handler
     events:
@@ -36,7 +36,7 @@ functions:
           path: events
           method: post
           cors: true
- 
+
   listEvents:
     handler: dist/events/list.handler
     events:
@@ -44,7 +44,7 @@ functions:
           path: events
           method: get
           cors: true
- 
+
   replaceEvent:
     handler: dist/events/replace.handler
     events:
@@ -52,7 +52,7 @@ functions:
           path: events/{id}
           method: put
           cors: true
- 
+
   updateEvent:
     handler: dist/events/update.handler
     events:
@@ -60,7 +60,7 @@ functions:
           path: events/{id}
           method: patch
           cors: true
- 
+
   deleteEvent:
     handler: dist/events/delete.handler
     events:
@@ -68,4 +68,54 @@ functions:
           path: events/{id}
           method: delete
           cors: true
- 
+
+  # ==========================================
+  # VENUE CONTROL · API de Espacios y Zonas
+  # ==========================================
+  listZones:
+    handler: dist/zones/list.handler
+    events:
+      - http:
+          path: zones
+          method: get
+          cors: true
+
+  getZone:
+    handler: dist/zones/get.handler
+    events:
+      - http:
+          path: zones/{id}
+          method: get
+          cors: true
+
+  createZone:
+    handler: dist/zones/create.handler
+    events:
+      - http:
+          path: zones
+          method: post
+          cors: true
+
+  replaceZone:
+    handler: dist/zones/replace.handler
+    events:
+      - http:
+          path: zones/{id}
+          method: put
+          cors: true
+
+  updateZone:
+    handler: dist/zones/update.handler
+    events:
+      - http:
+          path: zones/{id}
+          method: patch
+          cors: true
+
+  deleteZone:
+    handler: dist/zones/delete.handler
+    events:
+      - http:
+          path: zones/{id}
+          method: delete
+          cors: true
